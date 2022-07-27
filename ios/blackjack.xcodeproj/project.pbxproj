@@ -12,6 +12,10 @@
 		13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
+		5CEF9D7B2889F43C00BECEC9 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5CEF9D7A2889F43B00BECEC9 /* GoogleService-Info.plist */; };
+		5CEF9D7C2889F43C00BECEC9 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5CEF9D7A2889F43B00BECEC9 /* GoogleService-Info.plist */; };
+		5CEF9D7F288AB44F00BECEC9 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 5CEF9D7E288AB44F00BECEC9 /* FirebaseAuth */; };
+		5CEF9D81288AB44F00BECEC9 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 5CEF9D80288AB44F00BECEC9 /* FirebaseFirestore */; };
 		7699B88040F8A987B510C191 /* libPods-blackjack-blackjackTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 19F6CBCC0A4E27FBF8BF4A61 /* libPods-blackjack-blackjackTests.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 /* End PBXBuildFile section */
@@ -40,6 +44,7 @@
 		3B4392A12AC88292D35C810B /* Pods-blackjack.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-blackjack.debug.xcconfig"; path = "Target Support Files/Pods-blackjack/Pods-blackjack.debug.xcconfig"; sourceTree = "<group>"; };
 		5709B34CF0A7D63546082F79 /* Pods-blackjack.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-blackjack.release.xcconfig"; path = "Target Support Files/Pods-blackjack/Pods-blackjack.release.xcconfig"; sourceTree = "<group>"; };
 		5B7EB9410499542E8C5724F5 /* Pods-blackjack-blackjackTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-blackjack-blackjackTests.debug.xcconfig"; path = "Target Support Files/Pods-blackjack-blackjackTests/Pods-blackjack-blackjackTests.debug.xcconfig"; sourceTree = "<group>"; };
+		5CEF9D7A2889F43B00BECEC9 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		5DCACB8F33CDC322A6C60F78 /* libPods-blackjack.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-blackjack.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = blackjack/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		89C6BE57DB24E9ADA2F236DE /* Pods-blackjack-blackjackTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-blackjack-blackjackTests.release.xcconfig"; path = "Target Support Files/Pods-blackjack-blackjackTests/Pods-blackjack-blackjackTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -60,6 +65,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				0C80B921A6F3F58F76C31292 /* libPods-blackjack.a in Frameworks */,
+				5CEF9D7F288AB44F00BECEC9 /* FirebaseAuth in Frameworks */,
+				5CEF9D81288AB44F00BECEC9 /* FirebaseFirestore in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -86,6 +93,7 @@
 		13B07FAE1A68108700A75B9A /* blackjack */ = {
 			isa = PBXGroup;
 			children = (
+				5CEF9D7A2889F43B00BECEC9 /* GoogleService-Info.plist */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.mm */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
@@ -190,6 +198,10 @@
 			dependencies = (
 			);
 			name = blackjack;
+			packageProductDependencies = (
+				5CEF9D7E288AB44F00BECEC9 /* FirebaseAuth */,
+				5CEF9D80288AB44F00BECEC9 /* FirebaseFirestore */,
+			);
 			productName = blackjack;
 			productReference = 13B07F961A680F5B00A75B9A /* blackjack.app */;
 			productType = "com.apple.product-type.application";
@@ -220,6 +232,9 @@
 				Base,
 			);
 			mainGroup = 83CBB9F61A601CBA00E9B192;
+			packageReferences = (
+				5CEF9D7D288AB44F00BECEC9 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+			);
 			productRefGroup = 83CBBA001A601CBA00E9B192 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -235,6 +250,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5CEF9D7C2889F43C00BECEC9 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -244,6 +260,7 @@
 			files = (
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
+				5CEF9D7B2889F43C00BECEC9 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -697,6 +714,30 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		5CEF9D7D288AB44F00BECEC9 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		5CEF9D7E288AB44F00BECEC9 /* FirebaseAuth */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5CEF9D7D288AB44F00BECEC9 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAuth;
+		};
+		5CEF9D80288AB44F00BECEC9 /* FirebaseFirestore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5CEF9D7D288AB44F00BECEC9 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseFirestore;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 83CBB9F71A601CBA00E9B192 /* Project object */;
 }
