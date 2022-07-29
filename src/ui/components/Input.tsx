@@ -3,13 +3,14 @@ import {Dimensions, StyleSheet, TextInput, View} from 'react-native';
 
 interface Props {
   value: string;
-  onChange: React.Dispatch<SetStateAction<string>>;
+  onChange: (text: string) => void;
+  placeholder: string,
 }
 
-const Input: FC<Props> = ({value, onChange}) => {
+const Input: FC<Props> = ({value, onChange, placeholder}) => {
   return (
     <View>
-      <TextInput style={styles.input} value={value} onChange={onChange} />
+      <TextInput style={styles.input} value={value} onChangeText={onChange} placeholder={placeholder}/>
     </View>
   );
 };
@@ -21,6 +22,9 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 10,
     alignSelf: 'center',
+    padding: 10,
+    marginVertical: 15,
+    backgroundColor: '#ffff77'
   },
 });
 

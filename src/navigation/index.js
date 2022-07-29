@@ -4,7 +4,7 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import HomeScreen from '../ui/screens/Home/HomeScreen';
 import LoginScreen from '../ui/screens/Login/LoginScreen';
 
-// import auth from '@react-native-firebase/auth';
+import auth from '@react-native-firebase/auth';
 
 const Stack = createNativeStackNavigator();
 
@@ -18,11 +18,11 @@ export const RootNavigation = () => {
     // if (initializing) setInitializing(false);
   }
 
-  //   useEffect(() => {
-  //     console.log('blafff', auth());
-  //     const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
-  //     return subscriber; // unsubscribe on unmount
-  //   }, []);
+  useEffect(() => {
+    console.log('blafff', auth());
+    const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
+    return subscriber; // unsubscribe on unmount
+  }, []);
 
   return (
     <NavigationContainer>

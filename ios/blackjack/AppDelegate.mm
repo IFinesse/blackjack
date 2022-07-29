@@ -34,7 +34,9 @@ static NSString *const kRNConcurrentRoot = @"concurrentRoot";
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
 
-  [FIRApp configure];
+  // Add me --- \/
+    [FIRApp configure];
+    // Add me --- /\
   
   RCTAppSetupPrepareApp(application);
 
