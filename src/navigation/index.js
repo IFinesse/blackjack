@@ -3,30 +3,32 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import HomeScreen from '../ui/screens/Home/HomeScreen';
 import LoginScreen from '../ui/screens/Login/LoginScreen';
+import SignUpScreen from '../ui/screens/SignUp/SignUpScreen';
 
 import auth from '@react-native-firebase/auth';
+
+import {useAppSelector} from '../store/hooks';
 
 const Stack = createNativeStackNavigator();
 
 export const RootNavigation = () => {
-  console.log('bla2');
+  const [user, setUser] = useState(null);
 
-  const [user, setUser] = useState('null');
-
-  function onAuthStateChanged(user) {
-    setUser(user);
-    // if (initializing) setInitializing(false);
-  }
+  const isUserSignedIn = useAppSelector(state => state.auth.isSignedIn);
 
   useEffect(() => {
-    console.log('blafff', auth());
-    const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
-    return subscriber; // unsubscribe on unmount
+    const user = auth().currentUser;
+    console.log('bla user', user);
+    if (user) {
+      setUser(true);
+    } else {
+      setUser(null);
+    }
   }, []);
 
   return (
     <NavigationContainer>
-      {user === null ? (
+      {isUserSignedIn ? (
         <Stack.Navigator>
           <Stack.Screen
             name="Home"
@@ -36,6 +38,11 @@ export const RootNavigation = () => {
         </Stack.Navigator>
       ) : (
         <Stack.Navigator>
+          <Stack.Screen
+            name="SignUp"
+            component={SignUpScreen}
+            options={{headerShown: false}}
+          />
           <Stack.Screen
             name="Login"
             component={LoginScreen}

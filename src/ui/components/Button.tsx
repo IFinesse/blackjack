@@ -2,12 +2,15 @@ import React, {FC, SetStateAction} from 'react';
 import {Dimensions, StyleSheet, Text, TouchableOpacity} from 'react-native';
 
 interface Props {
-  onPress: () => void,
+  onPress: () => void;
+  text: string;
 }
 
-const Button: FC<Props> = ({onPress}) => {
+const Button: FC<Props> = ({onPress, text}) => {
   return (
-    <TouchableOpacity style={styles.button}><Text>submit</Text></TouchableOpacity>
+    <TouchableOpacity style={styles.button} onPress={onPress}>
+      <Text>{text}</Text>
+    </TouchableOpacity>
   );
 };
 
