@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "562765381724",
+    "project_id": "blackjack-a9c2f",
+    "storage_bucket": "blackjack-a9c2f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:562765381724:android:719706299bfb4a48502699",
+        "android_client_info": {
+          "package_name": "com.blackjack"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "562765381724-8e39j91bbnqk0jr7l0ml53ch6uh379dm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCSM7kKdsxEN3_M6QmG8g4ZrOzIQ6t9YSw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "562765381724-8e39j91bbnqk0jr7l0ml53ch6uh379dm.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "562765381724-2r7oh38hvbmd9k48tuhrmku35csbr4ko.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "org.reactjs.native.example.blackjack"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
