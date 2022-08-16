@@ -28,7 +28,7 @@ export const RootNavigation = () => {
 
   return (
     <NavigationContainer>
-      {isUserSignedIn ? (
+      {!isUserSignedIn ? (
         <Stack.Navigator>
           <Stack.Screen
             name="Home"
