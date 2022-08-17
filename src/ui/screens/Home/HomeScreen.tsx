@@ -6,6 +6,8 @@ import {
   TouchableOpacity,
   StatusBar,
   ImageBackground,
+  Image,
+  Dimensions,
 } from 'react-native';
 
 import {logOut} from '../../../store/auth/authSlice';
@@ -40,14 +42,25 @@ const HomeScreen: FC = ({}) => {
       <View style={styles.title}>
         <Text style={styles.titleText}>LAS VEGAS CASINO</Text>
       </View>
-      <View style={styles.image}>
-        <Text>image</Text>
+      <View style={styles.imageContainer}>
+        {/* <Text>image</Text> */}
+        <Image
+          source={require('../../../../assets/vegasLogo.png')}
+          style={styles.image}
+        />
       </View>
-      <View style={styles.description}>
-        <Text>min stack: </Text>
-        <Text>min bet</Text>
-        <Text>image</Text>
-        <Text>image</Text>
+      <View style={styles.descriptionContainer}>
+        <View style={styles.description}>
+          <Text style={styles.descriptionText}>Minimum stack: 1$ </Text>
+          <Text style={[styles.descriptionText, {fontSize: 11}]}>
+            Minimum bet: 1$
+          </Text>
+          <Text
+            style={[styles.descriptionText, {fontSize: 11, marginBottom: 9}]}>
+            Maximum bet: 500$
+          </Text>
+          <Text style={styles.descriptionText}>Card decks: 4</Text>
+        </View>
       </View>
       <View style={styles.playButton}>
         <TouchableOpacity onPress={() => {}}>
@@ -96,13 +109,33 @@ const styles = StyleSheet.create({
   titleText: {
     fontSize: 23,
     color: '#FFF',
-    fontWeight: '500',
+    fontFamily: 'SourceCodePro-Regular',
+  },
+  imageContainer: {
+    flex: 5,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   image: {
-    flex: 5,
+    width: Dimensions.get('window').width / 1.7,
+    height: Dimensions.get('window').height / 4.5,
+  },
+  descriptionContainer: {
+    flex: 3,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   description: {
-    flex: 3,
+    backgroundColor: 'rgba(0,0,0, 0.75)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingVertical: 3,
+    paddingHorizontal: 15,
+  },
+  descriptionText: {
+    color: 'white',
+    fontFamily: 'SourceCodePro-Bold',
+    fontSize: 12,
   },
   playButton: {
     flex: 3,
