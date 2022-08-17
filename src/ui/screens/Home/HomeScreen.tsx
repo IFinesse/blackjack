@@ -9,12 +9,13 @@ import {
   Image,
   Dimensions,
 } from 'react-native';
-
+import Button from '../../components/Button';
+import LinearGradient from 'react-native-linear-gradient';
 import {logOut} from '../../../store/auth/authSlice';
 
 import {useAppDispatch} from '../../../store/hooks';
 
-const HomeScreen: FC = ({}) => {
+const HomeScreen: FC = ({navigation}) => {
   const dispatch = useAppDispatch();
 
   // const [winner, setWinner] = useState('');
@@ -62,10 +63,12 @@ const HomeScreen: FC = ({}) => {
           <Text style={styles.descriptionText}>Card decks: 4</Text>
         </View>
       </View>
-      <View style={styles.playButton}>
-        <TouchableOpacity onPress={() => {}}>
-          <Text>Profile</Text>
-        </TouchableOpacity>
+      <View style={styles.buttonContainer}>
+        <LinearGradient colors={['#FFA500', '#FF7F10']} style={styles.button}>
+          <TouchableOpacity onPress={() => navigation.navigate('Game')}>
+            <Text style={styles.buttonText}>Play</Text>
+          </TouchableOpacity>
+        </LinearGradient>
       </View>
       <View style={styles.amount}>
         <TouchableOpacity onPress={() => {}}>
@@ -122,7 +125,7 @@ const styles = StyleSheet.create({
   },
   descriptionContainer: {
     flex: 3,
-    justifyContent: 'center',
+    justifyContent: 'flex-end',
     alignItems: 'center',
   },
   description: {
@@ -137,8 +140,20 @@ const styles = StyleSheet.create({
     fontFamily: 'SourceCodePro-Bold',
     fontSize: 12,
   },
-  playButton: {
+  buttonContainer: {
     flex: 3,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  button: {
+    paddingVertical: 5,
+    paddingHorizontal: 30,
+    borderRadius: 5,
+  },
+  buttonText: {
+    color: 'white',
+    fontSize: 20,
+    fontFamily: 'Ubuntu-Bold',
   },
   amount: {
     flex: 1,
