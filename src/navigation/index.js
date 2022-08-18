@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import HomeScreen from '../ui/screens/Home/HomeScreen';
+import GameScreen from '../ui/screens/Game/GameScreen';
 import LoginScreen from '../ui/screens/Login/LoginScreen';
 import SignUpScreen from '../ui/screens/SignUp/SignUpScreen';
 
@@ -33,6 +34,11 @@ export const RootNavigation = () => {
           <Stack.Screen
             name="Home"
             component={HomeScreen}
+            options={{headerShown: false}}
+          />
+          <Stack.Screen
+            name="Game"
+            component={GameScreen}
             options={{headerShown: false}}
           />
         </Stack.Navigator>

@@ -9,13 +9,17 @@ import {
   Image,
   Dimensions,
 } from 'react-native';
-import Button from '../../components/Button';
 import LinearGradient from 'react-native-linear-gradient';
 import {logOut} from '../../../store/auth/authSlice';
+import {NavigationProp} from '@react-navigation/native';
 
 import {useAppDispatch} from '../../../store/hooks';
 
-const HomeScreen: FC = ({navigation}) => {
+interface Props {
+  navigation: NavigationProp<any, any>;
+}
+
+const HomeScreen: FC<Props> = ({navigation}) => {
   const dispatch = useAppDispatch();
 
   // const [winner, setWinner] = useState('');
@@ -34,9 +38,19 @@ const HomeScreen: FC = ({navigation}) => {
       {/* <Text>Home</Text> */}
       <View style={styles.header}>
         <TouchableOpacity onPress={() => {}} style={styles.headerItemContainer}>
+          <Image
+            source={require('../../../../assets/cup.png')}
+            resizeMode="cover"
+            style={styles.icon}
+          />
           <Text style={styles.text}>Achievements</Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={onLogOut} style={styles.headerItemContainer}>
+        <TouchableOpacity onPress={() => {}} style={styles.headerItemContainer}>
+          <Image
+            source={require('../../../../assets/profile.png')}
+            resizeMode="cover"
+            style={styles.icon}
+          />
           <Text style={styles.text}>Profile</Text>
         </TouchableOpacity>
       </View>
@@ -70,11 +84,41 @@ const HomeScreen: FC = ({navigation}) => {
           </TouchableOpacity>
         </LinearGradient>
       </View>
-      <View style={styles.amount}>
-        <TouchableOpacity onPress={() => {}}>
-          <Text style={styles.amountText}>$100000</Text>
+      <ImageBackground
+        source={require('../../../../assets/wood1.jpeg')}
+        resizeMode="center"
+        style={styles.amountContainer}>
+        <TouchableOpacity onPress={() => {}} style={styles.amount}>
+          {/* <Text style={styles.amountText}>$100000</Text> */}
+          <Image
+            source={require('../../../../assets/chip2.png')}
+            style={styles.chipLogo}
+          />
+          <Text style={styles.amountText}>$1000000</Text>
         </TouchableOpacity>
-      </View>
+        <TouchableOpacity onPress={() => {}} style={styles.plusContainer}>
+          <LinearGradient
+            colors={['#FF7F10', '#FFD700', '#FF7F10']}
+            start={{x: 0, y: 0}}
+            end={{x: 1, y: 1}}
+            style={styles.plus}>
+            <Text style={{fontSize: 19, padding: 0}}>+</Text>
+          </LinearGradient>
+          <View style={styles.plusNotification}>
+            <Text
+              style={{
+                color: 'white',
+                fontSize: 9,
+                fontFamily: 'SourceCodePro-Bold',
+                position: 'relative',
+                // left: 1,
+                top: -1,
+              }}>
+              1
+            </Text>
+          </View>
+        </TouchableOpacity>
+      </ImageBackground>
     </ImageBackground>
   );
 };
@@ -88,6 +132,7 @@ const styles = StyleSheet.create({
   text: {
     color: '#FFF',
     fontSize: 13,
+    fontFamily: 'SourceCodePro-SemiBold',
   },
   header: {
     flex: 1,
@@ -98,11 +143,19 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   headerItemContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
     padding: 6,
     borderRadius: 1,
     borderWidth: 1,
     borderColor: '#333',
     backgroundColor: '#000',
+  },
+  icon: {
+    width: 20,
+    height: 20,
+    marginRight: 5,
   },
   title: {
     flex: 3,
@@ -147,8 +200,8 @@ const styles = StyleSheet.create({
   },
   button: {
     paddingVertical: 5,
-    paddingHorizontal: 30,
-    borderRadius: 5,
+    paddingHorizontal: 50,
+    borderRadius: 7,
   },
   buttonText: {
     color: 'white',
@@ -156,14 +209,59 @@ const styles = StyleSheet.create({
     fontFamily: 'Ubuntu-Bold',
   },
   amount: {
+    flexDirection: 'row',
+    backgroundColor: 'rgba(0,0,0, 0.5)',
+    borderRadius: 4,
+    shadowOffset: {
+      width: 0,
+      height: -1,
+    },
+    shadowOpacity: 1,
+    shadowRadius: 6,
+    shadowColor: '#000',
+  },
+  amountContainer: {
     flex: 1,
+    flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
+    borderRadius: 50,
   },
   amountText: {
     fontSize: 13,
     color: '#FFF',
     fontWeight: '500',
+    paddingHorizontal: 25,
+    paddingVertical: 3,
+  },
+  chipLogo: {
+    width: 24,
+    height: 24,
+    position: 'absolute',
+    zIndex: 5,
+    left: -15,
+    top: -1,
+  },
+  plusContainer: {
+    marginLeft: 6,
+  },
+  plus: {
+    width: 24,
+    height: 24,
+    borderRadius: 3,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  plusNotification: {
+    position: 'absolute',
+    width: 12,
+    height: 12,
+    borderRadius: 5,
+    backgroundColor: 'red',
+    justifyContent: 'center',
+    alignItems: 'center',
+    left: 18,
+    top: -6,
   },
 });
 
