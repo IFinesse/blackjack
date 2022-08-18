@@ -4,12 +4,14 @@ import {Dimensions, StyleSheet, Text, TouchableOpacity} from 'react-native';
 interface Props {
   onPress: () => void;
   text: string;
+  buttonStyle: any;
+  textStyle: any;
 }
 
-const Button: FC<Props> = ({onPress, text}) => {
+const Button: FC<Props> = ({onPress, text, buttonStyle, textStyle}) => {
   return (
-    <TouchableOpacity style={styles.button} onPress={onPress}>
-      <Text>{text}</Text>
+    <TouchableOpacity onPress={onPress} style={[styles.button, buttonStyle]}>
+      <Text style={[styles.text, textStyle]}>{text}</Text>
     </TouchableOpacity>
   );
 };
@@ -26,6 +28,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: 75,
   },
+  text: {},
 });
 
 export default Button;
