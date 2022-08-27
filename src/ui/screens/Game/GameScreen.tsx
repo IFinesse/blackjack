@@ -11,111 +11,90 @@ import {
 import LinearGradient from 'react-native-linear-gradient';
 
 import {logOut} from '../../../store/auth/authSlice';
+import {getRandomDeck} from '../../../store/game/gameSlice';
 
-import {useAppDispatch} from '../../../store/hooks';
+import {
+  dealCardsForPlayer,
+  dealCardsForDealer,
+  setAmountToBet,
+  hitForPlayer,
+  hitForDealer,
+  finishGame,
+  checkSum,
+} from '../../../store/game/gameSlice';
+
+import {useAppDispatch, useAppSelector} from '../../../store/hooks';
 
 import Button from '../../components/Button';
 
 const GameScreen: FC = ({}) => {
   const dispatch = useAppDispatch();
 
+  const dealerCards = useAppSelector(state => state.game.dealerCards);
+  const playerCards = useAppSelector(state => state.game.playerCards);
+  const cashAmount = useAppSelector(state => state.game.cashAmount);
+  const amountToBet = useAppSelector(state => state.game.amountToBet);
+  const result = useAppSelector(state => state.game.result);
+
+  const [areCardsDealed, setCardsDealed] = useState(false);
+  const [hiddenCard, setHiddenCard] = useState(true);
+  const [standPressed, setStandPressed] = useState(false);
+  // const [amountToBet, setAmountToBet] = useState<number>(0);
+
   // const [winner, setWinner] = useState('');
   const onLogOut = () => {
     dispatch(logOut());
   };
 
-  useEffect(() => {}, []);
-
-  const deck = {
-    suits: ['♥', '♠', '♣', '♦'],
-    courts: ['J', 'Q', 'K', 'A'],
-    [Symbol.iterator]: function* () {
-      for (let suit of this.suits) {
-        for (let i = 2; i <= 10; i++) yield suit + i;
-        for (let c of this.courts) yield suit + c;
+  useEffect(() => {
+    if (areCardsDealed) {
+      console.log('bla checksum player', checkSum(playerCards));
+      if (checkSum(playerCards) > 21) {
+        dispatch(finishGame());
+        setHiddenCard(false);
       }
-    },
-  };
-
-  console.log('bla', [...deck]);
-
-  const randomDeck = [...deck].sort((a, b) => 0.5 - Math.random());
-
-  const dealerCards = [randomDeck.pop(), randomDeck.pop()];
-  console.log('blad', dealerCards, randomDeck);
-
-  const playerCards = [randomDeck.pop(), randomDeck.pop()];
-  console.log('blad2', playerCards, randomDeck);
-
-  console.log('bla r', randomDeck);
-
-  function calculateWinner(dealerCards, playerCards) {
-    let winner = '';
-    if (checkSum(dealerCards) > checkSum(playerCards)) {
-      winner = 'dealer';
-    } else if (checkSum(dealerCards) < checkSum(playerCards)) {
-      winner = 'you';
-    } else {
-      winner = 'push';
     }
+  }, [playerCards, dispatch, areCardsDealed]);
 
-    return winner;
-  }
-
-  console.log(
-    'bla',
-    dealerCards,
-    playerCards,
-    checkSum(dealerCards),
-
-    calculateWinner(dealerCards, playerCards),
-  );
-
-  function checkSum(cards: any) {
-    let sum = 0;
-    cards.forEach(card => {
-      console.log('bla card', card, card[1]);
-
-      switch (card[1]) {
-        case '2':
-          sum += 2;
-          break;
-        case '3':
-          sum += 3;
-          break;
-        case '4':
-          sum += 4;
-          break;
-        case '5':
-          sum += 5;
-          break;
-        case '6':
-          sum += 6;
-          break;
-        case '7':
-          sum += 7;
-          break;
-        case '8':
-          sum += 8;
-          break;
-        case '9':
-          sum += 9;
-          break;
-        case '10':
-        case 'J':
-        case 'Q':
-        case 'K':
-          sum += 10;
-          break;
-        case 'A':
-          sum += 1;
-          break;
-        default:
-          break;
+  useEffect(() => {
+    if (areCardsDealed) {
+      console.log('bla checksum dealer', checkSum(dealerCards));
+      if (checkSum(dealerCards) > 21) {
+        dispatch(finishGame());
+      } else if (checkSum(dealerCards) < 17) {
+        setTimeout(() => {
+          standPressed ? dispatch(hitForDealer()) : null;
+        }, 1000);
+      } else {
+        standPressed ? dispatch(finishGame()) : null;
       }
+    }
+  }, [dealerCards, dispatch, standPressed, areCardsDealed]);
+
+  function onDealHandler() {
+    // dispatch(setAmountToBet(amountToBet));
+    dispatch(getRandomDeck()).then(() => {
+      dispatch(dealCardsForPlayer());
+      dispatch(dealCardsForDealer());
     });
-    return sum;
+    setCardsDealed(true);
   }
+
+  function onHitHandler() {
+    dispatch(hitForPlayer());
+  }
+
+  function onStandHandler() {
+    setHiddenCard(false);
+    setStandPressed(true);
+    if (checkSum(dealerCards) < 17) dispatch(hitForDealer());
+  }
+
+  function onDoubleHandler() {
+    dispatch(hitForPlayer());
+  }
+
+  console.log('bla cards', dealerCards, playerCards);
 
   return (
     <LinearGradient
@@ -124,14 +103,49 @@ const GameScreen: FC = ({}) => {
       end={{x: 1, y: 0}}
       locations={[0, 0.8]}
       style={styles.container}>
-      <View style={styles.main}></View>
+      <View style={styles.main}>
+        {!areCardsDealed ? (
+          <View
+            style={{
+              flex: 1,
+              justifyContent: 'flex-end',
+              alignItems: 'center',
+              paddingBottom: 30,
+            }}>
+            <Text style={styles.amountToBetText}>Bet : ${amountToBet}</Text>
+            <View>
+              <Pressable style={styles.chip}>
+                <Text>1</Text>
+              </Pressable>
+            </View>
+          </View>
+        ) : (
+          <View>
+            <Text>Dealer :</Text>
+            {hiddenCard && dealerCards.length ? (
+              <Text>
+                {dealerCards[1]} X {checkSum([dealerCards[1]])}
+              </Text>
+            ) : (
+              <Text>
+                {dealerCards} {checkSum(dealerCards)}
+              </Text>
+            )}
+            <Text>
+              Player:
+              {playerCards} {checkSum(playerCards)}
+            </Text>
+          </View>
+        )}
+        {result && <Text>{result}</Text>}
+      </View>
       <ImageBackground
         source={require('../../../../assets/wood1.jpeg')}
         resizeMode="cover"
         style={styles.bottomContainer}>
         <Pressable onPress={() => {}} style={styles.amountContainer}>
           <View style={styles.amount}>
-            <Text style={styles.amountText}>100000</Text>
+            <Text style={styles.amountText}>{cashAmount}</Text>
           </View>
           <View style={styles.plusContainer}>
             <LinearGradient
@@ -147,50 +161,100 @@ const GameScreen: FC = ({}) => {
           </View>
         </Pressable>
         <View style={styles.chipsContainer}>
-          <Pressable style={styles.chip}>
+          <Pressable
+            style={styles.chip}
+            onPress={() => {
+              dispatch(setAmountToBet(1));
+            }}>
             <Text>1</Text>
           </Pressable>
-          <Pressable style={styles.chip}>
+          <Pressable
+            style={styles.chip}
+            onPress={() => {
+              dispatch(setAmountToBet(5));
+            }}>
             <Text>5</Text>
           </Pressable>
-          <Pressable style={styles.chip}>
+          <Pressable
+            style={styles.chip}
+            onPress={() => {
+              dispatch(setAmountToBet(10));
+            }}>
             <Text>10</Text>
           </Pressable>
-          <Pressable style={styles.chip}>
+          <Pressable
+            style={styles.chip}
+            onPress={() => {
+              dispatch(setAmountToBet(25));
+            }}>
             <Text>25</Text>
           </Pressable>
-          <Pressable style={styles.chip}>
+          <Pressable
+            style={styles.chip}
+            onPress={() => {
+              dispatch(setAmountToBet(100));
+            }}>
             <Text>100</Text>
           </Pressable>
         </View>
-        <View style={styles.buttonsContainer}>
-          <Button
-            onPress={() => {}}
-            text="Max. bet"
-            buttonStyle={{
-              width: Dimensions.get('window').width / 3.5,
-              height: 20,
-            }}
-          />
-          <Button
-            onPress={() => {}}
-            text="Deal"
-            buttonStyle={{
-              width: Dimensions.get('window').width / 3.5,
-              height: 20,
-            }}
-          />
-          <Button
-            onPress={() => {}}
-            text="Max. bet1"
-            buttonStyle={{
-              width: Dimensions.get('window').width / 3.5,
-              height: 20,
-              position: 'relative',
-              top: 100,
-            }}
-          />
-        </View>
+
+        {!areCardsDealed ? (
+          <View style={styles.buttonsContainer}>
+            <Button
+              onPress={() => {}}
+              text="Max. bet"
+              buttonStyle={{
+                width: Dimensions.get('window').width / 3.5,
+                height: 20,
+              }}
+            />
+            <Button
+              onPress={() => onDealHandler()}
+              text="Deal"
+              buttonStyle={{
+                width: Dimensions.get('window').width / 3.5,
+                height: 20,
+              }}
+            />
+            <Button
+              onPress={() => {}}
+              text="Max. bet1"
+              buttonStyle={{
+                width: Dimensions.get('window').width / 3.5,
+                height: 20,
+                position: 'relative',
+                top: 100,
+              }}
+            />
+          </View>
+        ) : (
+          <View style={styles.buttonsContainer}>
+            <Button
+              onPress={() => onDoubleHandler()}
+              text="Double"
+              buttonStyle={{
+                width: Dimensions.get('window').width / 3.5,
+                height: 20,
+              }}
+            />
+            <Button
+              onPress={() => onStandHandler()}
+              text="Stand"
+              buttonStyle={{
+                width: Dimensions.get('window').width / 3.5,
+                height: 20,
+              }}
+            />
+            <Button
+              onPress={() => onHitHandler()}
+              text="Hit"
+              buttonStyle={{
+                width: Dimensions.get('window').width / 3.5,
+                height: 20,
+              }}
+            />
+          </View>
+        )}
       </ImageBackground>
     </LinearGradient>
   );
@@ -212,7 +276,15 @@ const styles = StyleSheet.create({
   },
   main: {
     flex: 5,
+    justifyContent: 'center',
+    alignItems: 'center',
     // backgroundColor: '#ffd',
+  },
+  amountToBetText: {
+    color: 'white',
+    fontFamily: 'Ubuntu-Bold',
+    fontSize: 20,
+    marginBottom: 10,
   },
   bottomContainer: {
     flex: 1,
