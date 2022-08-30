@@ -34,50 +34,108 @@ const GameScreen: FC = ({}) => {
   const playerCards = useAppSelector(state => state.game.playerCards);
   const cashAmount = useAppSelector(state => state.game.cashAmount);
   const amountToBet = useAppSelector(state => state.game.amountToBet);
-  const result = useAppSelector(state => state.game.result);
+  const resultDescription = useAppSelector(
+    state => state.game.resultDescription,
+  );
 
   const [areCardsDealed, setCardsDealed] = useState(false);
   const [hiddenCard, setHiddenCard] = useState(true);
   const [standPressed, setStandPressed] = useState(false);
+  const [result, setResult] = useState(false);
   // const [amountToBet, setAmountToBet] = useState<number>(0);
 
   // const [winner, setWinner] = useState('');
-  const onLogOut = () => {
-    dispatch(logOut());
-  };
+
+  // function finishGame() {
+  //   dispatch(finishGame());
+  //   setResult(true);
+  // }
 
   useEffect(() => {
-    if (areCardsDealed) {
-      console.log('bla checksum player', checkSum(playerCards));
-      if (checkSum(playerCards) > 21) {
-        dispatch(finishGame());
-        setHiddenCard(false);
-      }
+    if (result) {
+      setCardsDealed(false);
+      setStandPressed(false);
+      dispatch(setAmountToBet(0));
+      // setHiddenCard(true);
     }
-  }, [playerCards, dispatch, areCardsDealed]);
+  }, [result, dispatch]);
+
+  // useEffect(() => {
+  //   if (areCardsDealed) {
+  //     console.log('bla checksum player', checkSum(playerCards));
+  //     if (
+  //       checkSum(playerCards) > 21 ||
+  //       (checkSum(playerCards) === 21 && playerCards.length === 2)
+  //     ) {
+  //       dispatch(finishGame());
+  //       setResult(true);
+  //       setHiddenCard(false);
+  //     }
+  //   }
+  // }, [playerCards, dispatch, areCardsDealed]);
+
+  // useEffect(() => {
+  //   if (areCardsDealed) {
+  //     console.log('bla checksum dealer', checkSum(dealerCards));
+  //     if (checkSum(dealerCards) > 21) {
+  //       dispatch(finishGame());
+  //       setResult(true);
+  //       setHiddenCard(false);
+  //     } else if (checkSum(dealerCards) < 17) {
+  //       setTimeout(() => {
+  //         standPressed ? dispatch(hitForDealer()) : null;
+  //       }, 1000);
+  //     } else {
+  //       if (standPressed) {
+  //         dispatch(finishGame());
+  //         setResult(true);
+  //         setHiddenCard(false);
+  //       }
+  //     }
+  //   }
+  // }, [dealerCards, dispatch, standPressed, areCardsDealed]);
 
   useEffect(() => {
     if (areCardsDealed) {
-      console.log('bla checksum dealer', checkSum(dealerCards));
-      if (checkSum(dealerCards) > 21) {
+      if (
+        checkSum(playerCards) > 21 ||
+        (checkSum(playerCards) === 21 && playerCards.length === 2) ||
+        checkSum(dealerCards) > 21
+      ) {
         dispatch(finishGame());
-      } else if (checkSum(dealerCards) < 17) {
+        setResult(true);
+        setHiddenCard(false);
+      } else if (
+        (checkSum(dealerCards) < 17 && standPressed) ||
+        (checkSum(dealerCards) < 17 &&
+          checkSum(playerCards) === 21 &&
+          playerCards.length > 2)
+      ) {
         setTimeout(() => {
-          standPressed ? dispatch(hitForDealer()) : null;
+          dispatch(hitForDealer());
         }, 1000);
       } else {
-        standPressed ? dispatch(finishGame()) : null;
+        if (standPressed) {
+          dispatch(finishGame());
+          setResult(true);
+          setHiddenCard(false);
+        }
       }
     }
-  }, [dealerCards, dispatch, standPressed, areCardsDealed]);
+  }, [areCardsDealed, playerCards, dealerCards, dispatch, standPressed]);
 
   function onDealHandler() {
     // dispatch(setAmountToBet(amountToBet));
-    dispatch(getRandomDeck()).then(() => {
-      dispatch(dealCardsForPlayer());
-      dispatch(dealCardsForDealer());
-    });
-    setCardsDealed(true);
+    if (amountToBet > 0) {
+      setResult(false);
+      dispatch(getRandomDeck()).then(() => {
+        dispatch(dealCardsForPlayer());
+        dispatch(dealCardsForDealer());
+      });
+
+      setCardsDealed(true);
+      setHiddenCard(true);
+    }
   }
 
   function onHitHandler() {
@@ -108,7 +166,8 @@ const GameScreen: FC = ({}) => {
           <View
             style={{
               flex: 1,
-              justifyContent: 'flex-end',
+              // flexDirection: 'row',
+              justifyContent: 'space-around',
               alignItems: 'center',
               paddingBottom: 30,
             }}>
@@ -121,8 +180,13 @@ const GameScreen: FC = ({}) => {
           </View>
         ) : (
           <View>
+            <Text>bet amount: {amountToBet}</Text>
+          </View>
+        )}
+        {areCardsDealed || result ? (
+          <View>
             <Text>Dealer :</Text>
-            {hiddenCard && dealerCards.length ? (
+            {hiddenCard && dealerCards.length && !result ? (
               <Text>
                 {dealerCards[1]} X {checkSum([dealerCards[1]])}
               </Text>
@@ -136,8 +200,8 @@ const GameScreen: FC = ({}) => {
               {playerCards} {checkSum(playerCards)}
             </Text>
           </View>
-        )}
-        {result && <Text>{result}</Text>}
+        ) : null}
+        {result && <Text>{resultDescription}</Text>}
       </View>
       <ImageBackground
         source={require('../../../../assets/wood1.jpeg')}
@@ -164,35 +228,35 @@ const GameScreen: FC = ({}) => {
           <Pressable
             style={styles.chip}
             onPress={() => {
-              dispatch(setAmountToBet(1));
+              dispatch(setAmountToBet(amountToBet + 1));
             }}>
             <Text>1</Text>
           </Pressable>
           <Pressable
             style={styles.chip}
             onPress={() => {
-              dispatch(setAmountToBet(5));
+              dispatch(setAmountToBet(amountToBet + 5));
             }}>
             <Text>5</Text>
           </Pressable>
           <Pressable
             style={styles.chip}
             onPress={() => {
-              dispatch(setAmountToBet(10));
+              dispatch(setAmountToBet(amountToBet + 10));
             }}>
             <Text>10</Text>
           </Pressable>
           <Pressable
             style={styles.chip}
             onPress={() => {
-              dispatch(setAmountToBet(25));
+              dispatch(setAmountToBet(amountToBet + 25));
             }}>
             <Text>25</Text>
           </Pressable>
           <Pressable
             style={styles.chip}
             onPress={() => {
-              dispatch(setAmountToBet(100));
+              dispatch(setAmountToBet(amountToBet + 100));
             }}>
             <Text>100</Text>
           </Pressable>
@@ -276,7 +340,7 @@ const styles = StyleSheet.create({
   },
   main: {
     flex: 5,
-    justifyContent: 'center',
+    justifyContent: 'space-around',
     alignItems: 'center',
     // backgroundColor: '#ffd',
   },

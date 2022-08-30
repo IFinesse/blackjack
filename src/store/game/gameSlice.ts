@@ -12,7 +12,7 @@ interface GameState {
   dealerCards: string[];
   playerCards: string[];
   loading: boolean;
-  result: string;
+  resultDescription: string;
   error: any;
 }
 
@@ -30,7 +30,7 @@ const initialState: GameState = {
   dealerCards: [],
   playerCards: [],
   loading: false,
-  result: '',
+  resultDescription: '',
   error: null,
 };
 
@@ -67,8 +67,8 @@ export const gameSlice = createSlice({
       state.dealerCards = [state.randomDeck.pop(), state.randomDeck.pop()];
     },
     setAmountToBet: (state, action: PayloadAction<number>) => {
-      if (state.amountToBet + action.payload <= state.cashAmount) {
-        state.amountToBet += action.payload;
+      if (action.payload <= state.cashAmount) {
+        state.amountToBet = action.payload;
       }
     },
     hitForPlayer: state => {
@@ -79,13 +79,15 @@ export const gameSlice = createSlice({
     },
     finishGame: state => {
       const winner = calculateWinner(state.dealerCards, state.playerCards);
-      state.result = winner[1];
+      state.resultDescription = winner[1];
       switch (winner[0]) {
         case 'dealer':
           state.cashAmount -= state.amountToBet;
           break;
         case 'player':
-          state.cashAmount += state.amountToBet;
+          winner[1] === 'You have blackjack!'
+            ? (state.cashAmount += state.amountToBet * 1.5)
+            : (state.cashAmount += state.amountToBet);
           break;
         case 'push':
           break;
@@ -136,9 +138,13 @@ export default gameSlice.reducer;
 
 function calculateWinner(dealerCards, playerCards) {
   if (checkSum(playerCards) > 21) return ['dealer', 'You busted'];
+  if (checkSum(playerCards) === 21 && playerCards.length === 2)
+    return ['player', 'You have blackjack!'];
+  if (checkSum(dealerCards) > 21) return ['player', 'Dealer busted'];
+  if (checkSum(dealerCards) === 21 && dealerCards.length === 2)
+    return ['dealer', 'Dealer has blackjack'];
   if (checkSum(playerCards) < checkSum(dealerCards))
     return ['dealer', 'Dealer has the best score'];
-  if (checkSum(dealerCards) > 21) return ['player', 'Dealer busted'];
   if (checkSum(playerCards) > checkSum(dealerCards))
     return ['player', 'You have the best score'];
   if (checkSum(playerCards) === checkSum(dealerCards)) return ['push', 'Push'];
