@@ -26,6 +26,7 @@ import {
 import {useAppDispatch, useAppSelector} from '../../../store/hooks';
 
 import Button from '../../components/Button';
+import Card from '../../components/Card';
 
 const GameScreen: FC = ({}) => {
   const dispatch = useAppDispatch();
@@ -187,9 +188,10 @@ const GameScreen: FC = ({}) => {
           <View>
             <Text>Dealer :</Text>
             {hiddenCard && dealerCards.length && !result ? (
-              <Text>
-                {dealerCards[1]} X {checkSum([dealerCards[1]])}
-              </Text>
+              // <Text>
+              //   {dealerCards[1]} X {checkSum([dealerCards[1]])}
+              // </Text>
+              dealerCards.map(card => <Card value={card} />)
             ) : (
               <Text>
                 {dealerCards} {checkSum(dealerCards)}
